@@ -10,7 +10,7 @@
     "next:lint": "next lint",
     "format": "dprint fmt",
     "postinstall": "electron-builder install-app-deps",
-    "electron:dist": "electron-builder --dir",
+    "electron:dist": "electron-builder",
     "electron:dist:deb": "electron-builder --linux deb",
     "electron:build": "tsup",
     "build": "run-s next:build electron:build",
@@ -22,8 +22,9 @@
   },
   "build": {
     "asar": true,
-    "executableName": "NextJSElectron",
-    "appId": "com.saybackend.nextjs-electron",
+    "executableName": "SmartLedger",
+    "productName": "Smart Ledger",
+    "appId": "com.pedro.smart-ledger",
     "asarUnpack": [
       "node_modules/next",
       "node_modules/@img",
@@ -75,6 +76,10 @@
       "category": "Development"
     }
   },
+  "keywords": [],
+  "author": "Pedro Grigorio",
+  "license": "ISC",
+  "description": "Smart Ledger",
   "dependencies": {
     "@electron-toolkit/utils": "^3.0.0",
     "@hookform/resolvers": "^3.9.0",
