@@ -1,12 +1,15 @@
-import { is } from '@electron-toolkit/utils'
-import { fork } from 'child_process'
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { getPort } from 'get-port-please'
 import { startServer } from 'next/dist/server/lib/start-server'
-import path, { join } from 'path'
+import { getPort } from 'get-port-please'
+import { fork } from 'child_process'
+import { join } from 'path'
+import { is } from '@electron-toolkit/utils'
 import fs from 'fs'
 
-const logFilePath = path.join(process.resourcesPath, 'app.log')
+const logFilePath = is.dev
+  ? join(__dirname, '../../app.log')
+  : join(process.resourcesPath, 'app.log')
+
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' })
 
 const logToFile = (message: string) => {
@@ -15,9 +18,11 @@ const logToFile = (message: string) => {
   logStream.write(logMessage)
 }
 
-const dbPath = path.join(process.resourcesPath, 'data/database.db')
-logToFile(`caminho do banco: ${dbPath}`)
+const dbPath = is.dev
+  ? join(__dirname, '../../server/prisma/dev.db')
+  : join(process.resourcesPath, 'data/database.db')
 
+logToFile(`caminho do banco: ${dbPath}`)
 process.env.DATABASE_URL = `file:${dbPath}`
 
 const createWindow = () => {
@@ -74,11 +79,10 @@ const startNextJSServer = async () => {
 }
 
 const startBackend = () => {
-  // const backendPath = path.join(__dirname, '../../server/dist/main.js')
-  const backendPath = join(
-    process.resourcesPath,
-    'app.asar/server/dist/main.js',
-  )
+  const backendPath = is.dev
+    ? join(__dirname, '../../server/dist/main.js')
+    : join(process.resourcesPath, 'app.asar/server/dist/main.js')
+
   logToFile(`Starting backend from: ${backendPath}`)
 
   const backendProcess = fork(backendPath, {
