@@ -10,11 +10,13 @@ import { orderFormSchema } from '@/lib/validations/order-form-schema'
 import { OrderFormData } from '@/types/validations'
 import { getCustomers } from '@/services/customer-service'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { Textarea } from '@/components/shadcnui/textarea'
 import { useQuery } from '@tanstack/react-query'
 import { Customer } from '@/types/customer'
 import { Button } from '@/components/shadcnui/button'
 import { Order } from '@/types/order'
+import { toast } from '@/hooks/use-toast'
 import { Trash } from '@phosphor-icons/react/dist/ssr'
 import { Input } from '@/components/shadcnui/input'
 import { Label } from '@/components/shadcnui/label'
@@ -26,8 +28,6 @@ import {
   SelectItem,
   Select,
 } from '@/components/shadcnui/select'
-import { useEffect } from 'react'
-import { toast } from '@/hooks/use-toast'
 
 export default function EditOrder() {
   const { orderId } = useParams()
@@ -47,7 +47,7 @@ export default function EditOrder() {
     resolver: zodResolver(orderFormSchema),
     mode: 'onSubmit',
     defaultValues: {
-      customerId: order?.customer.id,
+      customerId: order?.customer.id.toString(),
       notes: order?.notes ?? '',
       status: order?.status,
       items: order?.items ?? [
@@ -88,7 +88,16 @@ export default function EditOrder() {
   }
 
   useEffect(() => {
-    reset(order)
+    if (order) {
+      const initialValues = {
+        customerId: order.customer.id.toString(),
+        notes: order.notes || '',
+        status: order.status,
+        items: order.items,
+      }
+
+      reset(initialValues)
+    }
   }, [order, customers, reset])
 
   if (!customers || !order) return null
@@ -249,8 +258,8 @@ export default function EditOrder() {
                   render={({ field }) => (
                     <Select
                       name={field.name}
-                      defaultValue={field.value ? field.value.toString() : ''}
-                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value}
+                      onValueChange={field.onChange}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o cliente" />
@@ -270,6 +279,7 @@ export default function EditOrder() {
                 />
                 <InputError error={errors.customerId?.message?.toString()} />
               </div>
+
               <div>
                 <Label htmlFor="notes">Notas</Label>
                 <Textarea
@@ -280,6 +290,7 @@ export default function EditOrder() {
                 />
                 <InputError error={errors.notes?.message?.toString()} />
               </div>
+
               <div>
                 <Label htmlFor="status">Status *</Label>
                 <Controller

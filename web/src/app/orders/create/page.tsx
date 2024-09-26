@@ -41,7 +41,7 @@ function CreateOrder() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const customerId = Number(searchParams.get('customer'))
+  const customerId = searchParams.get('customer')
 
   const { data: customers } = useQuery<Customer[]>({
     queryKey: ['customers'],
@@ -52,7 +52,7 @@ function CreateOrder() {
     resolver: zodResolver(orderFormSchema),
     mode: 'onSubmit',
     defaultValues: {
-      customerId: customerId ?? undefined,
+      customerId: customerId ?? '',
       notes: '',
       status: OrderStatus.PENDING,
       items: [
@@ -251,8 +251,8 @@ function CreateOrder() {
                     <Select
                       name={field.name}
                       disabled={!!customerId}
-                      defaultValue={field.value ? field.value.toString() : ''}
-                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value}
+                      onValueChange={field.onChange}
                     >
                       <SelectTrigger className="mt-1">
                         <SelectValue placeholder="Selecione o cliente" />

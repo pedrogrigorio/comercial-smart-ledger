@@ -28,9 +28,15 @@ export async function getOrdersByCustomer(
 }
 
 export async function createOrder(orderFormData: OrderFormData) {
-  console.log(orderFormData)
+  const { customerId: id, ...data } = orderFormData
+  const customerId = parseInt(id)
 
-  const response = await api.post('orders', orderFormData)
+  const body = {
+    customerId,
+    ...data,
+  }
+
+  const response = await api.post('orders', body)
 
   console.log(response.data)
 }
@@ -39,7 +45,15 @@ export async function updateOrder(
   orderId: number | string,
   orderFormData: OrderFormData,
 ) {
-  const response = await api.put(`orders/${orderId}`, orderFormData)
+  const { customerId: id, ...data } = orderFormData
+  const customerId = parseInt(id)
+
+  const body = {
+    customerId,
+    ...data,
+  }
+
+  const response = await api.put(`orders/${orderId}`, body)
 
   console.log(response.data)
 }

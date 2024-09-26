@@ -15,6 +15,6 @@ export const orderFormSchema = z.object({
     .array(itemSchema)
     .nonempty({ message: 'Pelo menos um item deve ser adicionado.' }),
   notes: z.string(),
-  customerId: z.number({ message: 'Campo obrigatório.' }),
+  customerId: z.string({ message: 'Campo obrigatório.' }),
   status: z.enum(['PENDING', 'PAID'], { message: 'Selecione um status.' }),
 })

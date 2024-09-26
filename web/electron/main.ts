@@ -109,13 +109,13 @@ const startBackend = () => {
     console.error(`Backend error output: ${data}`)
   })
 
-  setInterval(() => {
-    if (backendProcess.connected) {
-      logToFile('Backend process is still running')
-    } else {
-      logToFile('Backend process has stopped')
-    }
-  }, 5000)
+  // setInterval(() => {
+  //   if (backendProcess.connected) {
+  //     logToFile('Backend process is still running')
+  //   } else {
+  //     logToFile('Backend process has stopped')
+  //   }
+  // }, 5000)
 }
 
 app.whenReady().then(() => {
