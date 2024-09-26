@@ -26,9 +26,10 @@ export default function AddPaymentForm({ orderId }: AddPaymentFormProps) {
   })
 
   const {
-    formState: { errors },
-    handleSubmit,
+    setValue,
     register,
+    handleSubmit,
+    formState: { errors },
   } = paymentForm
 
   const onSubmit = async (data: PaymentFormData) => {
@@ -43,6 +44,14 @@ export default function AddPaymentForm({ orderId }: AddPaymentFormProps) {
     })
   }
 
+  const handleEnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      const currentValue = event.currentTarget.value
+      const formattedValue = formatCurrency(currencyToFloat(currentValue))
+      setValue('value', formattedValue)
+    }
+  }
+
   return (
     <form className="py-4" onSubmit={handleSubmit(onSubmit)} id="balance-form">
       <Label htmlFor="balance" className="text-right">
@@ -55,6 +64,7 @@ export default function AddPaymentForm({ orderId }: AddPaymentFormProps) {
         {...register('value', {
           onChange: currencyMask,
         })}
+        onKeyDown={handleEnterKey}
       />
       <InputError error={errors.value?.message?.toString()} />
     </form>

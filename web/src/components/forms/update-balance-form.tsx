@@ -34,6 +34,7 @@ export default function UpdateBalanceForm({
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = balanceForm
@@ -50,6 +51,14 @@ export default function UpdateBalanceForm({
     })
   }
 
+  const handleEnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      const currentValue = event.currentTarget.value
+      const formattedValue = formatCurrency(currencyToFloat(currentValue))
+      setValue('balance', formattedValue)
+    }
+  }
+
   return (
     <form className="py-4" onSubmit={handleSubmit(onSubmit)} id="balance-form">
       <Label htmlFor="balance" className="text-right">
@@ -62,6 +71,7 @@ export default function UpdateBalanceForm({
         {...register('balance', {
           onChange: currencyMask,
         })}
+        onKeyDown={handleEnterKey}
       />
       <InputError error={errors.balance?.message?.toString()} />
     </form>

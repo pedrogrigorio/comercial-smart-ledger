@@ -7,7 +7,7 @@ import { is } from '@electron-toolkit/utils'
 import fs from 'fs'
 
 const logFilePath = is.dev
-  ? join(__dirname, '../../app.log')
+  ? join(__dirname, '../app.log')
   : join(process.resourcesPath, 'app.log')
 
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' })

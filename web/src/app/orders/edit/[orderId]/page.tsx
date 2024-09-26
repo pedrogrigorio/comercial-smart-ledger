@@ -62,10 +62,10 @@ export default function EditOrder() {
 
   const {
     reset,
-    handleSubmit,
-    register,
     control,
+    register,
     clearErrors,
+    handleSubmit,
     formState: { errors, isDirty },
   } = orderForm
 
