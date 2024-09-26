@@ -13,7 +13,7 @@ interface CardProps {
 export default function Card({ order, orderNumber }: CardProps) {
   return (
     <Link href={`/orders/${order.id}`}>
-      <div className="border h-[300px] rounded-xl flex flex-col border-primary p-6 text-secondary">
+      <div className="border h-[324px] rounded-xl flex flex-col border-primary p-6 text-secondary">
         {/* Header */}
         <div className="flex justify-between items-center">
           <h2 className="font-medium">Pedido {orderNumber}</h2>
@@ -21,14 +21,20 @@ export default function Card({ order, orderNumber }: CardProps) {
         </div>
 
         {/* Body */}
-        <div className="mt-5 flex-1">
+        <div className="mt-4">
+          <span className="text-xs text-terciary">Descrição</span>
+          <p className="text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+            {order.notes ? order.notes : 'Nenhuma nota informada.'}
+          </p>
+        </div>
+        <div className="mt-2 flex-1">
           <span className="text-xs text-terciary">
             {order.items.length} {order.items.length === 1 ? 'item' : 'itens'}
           </span>
           <ul className="text-sm">
-            {order.items.length > 3 ? (
+            {order.items.length > 2 ? (
               <>
-                {order.items.slice(0, 3).map((item) => (
+                {order.items.slice(0, 2).map((item) => (
                   <li
                     key={item.id}
                     className="flex items-center justify-between"
