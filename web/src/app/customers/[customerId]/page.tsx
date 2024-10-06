@@ -28,7 +28,7 @@ export default function Customer() {
     queryFn: () => getCustomerById(customerId as string, true),
   })
 
-  if (!customer) return null
+  if (!customer || !customer.orders) return null
 
   const tabs = [
     {

@@ -13,7 +13,7 @@ import { deletePayment } from '@/services/payment-service'
 import { OrderStatus } from '@/enums/order-status'
 import { formatDate } from '@/utils/formatDate'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Payment } from '@/types/payment'
 import { Button } from '@/components/shadcnui/button'
 import { Input } from '@/components/shadcnui/input'
@@ -36,6 +36,10 @@ import {
 } from '@/services/order-service'
 
 export default function Order() {
+  useEffect(() => {
+    console.log('window.electron:', window.electron)
+  }, [])
+
   const [editStatus, setEditStatus] = useState(false)
   const [editNotes, setEditNotes] = useState(false)
   const queryClient = useQueryClient()
@@ -98,7 +102,7 @@ export default function Order() {
             <span className="text-terciary">{formatDate(order.createdAt)}</span>
           </div>
 
-          <OrderOptions order={order} variant="primary" />
+          <OrderOptions order={order} variant="primary" showPrintItem />
         </div>
       </Page.Header>
 

@@ -49,6 +49,7 @@ export default function CreateCustomer() {
     })
 
     reset()
+    router.back()
   }
 
   return (

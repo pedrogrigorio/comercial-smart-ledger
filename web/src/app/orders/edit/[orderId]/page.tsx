@@ -85,6 +85,7 @@ export default function EditOrder() {
     })
 
     reset(data)
+    router.back()
   }
 
   useEffect(() => {

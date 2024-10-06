@@ -1,7 +1,12 @@
 import DeleteDialog from '../dialogs/delete-dialog'
 import Link from 'next/link'
 
-import { Eye, PencilSimple, TrashSimple } from '@phosphor-icons/react/dist/ssr'
+import {
+  Eye,
+  PencilSimple,
+  Printer,
+  TrashSimple,
+} from '@phosphor-icons/react/dist/ssr'
 import { MoreHorizontal, MoreVertical } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
@@ -26,12 +31,14 @@ interface OrderOptionsProps {
   order: Order
   variant?: 'primary' | 'ghost'
   showViewItem?: boolean
+  showPrintItem?: boolean
 }
 
 export default function OrderOptions({
   order,
   variant,
   showViewItem,
+  showPrintItem,
 }: OrderOptionsProps) {
   const router = useRouter()
   const queryClient = useQueryClient()
@@ -44,6 +51,12 @@ export default function OrderOptions({
     })
 
     router.replace('/orders')
+  }
+
+  const onPrint = () => {
+    console.log('Enviando mensagem para o main...')
+    window.electron.ipcRenderer.send('print-order', order)
+    console.log('Mensagem enviada.')
   }
 
   return (
@@ -87,6 +100,18 @@ export default function OrderOptions({
             </DropdownMenuItem>
           )}
 
+          {showPrintItem && (
+            <DropdownMenuItem
+              onClick={(event) => {
+                event.stopPropagation()
+                onPrint()
+              }}
+              className="gap-2"
+            >
+              <Printer size={16} />
+              <span>Imprimir</span>
+            </DropdownMenuItem>
+          )}
           {/* Edit option */}
           <DropdownMenuItem asChild>
             <Link

@@ -37,10 +37,12 @@ export default function Card({ order, orderNumber }: CardProps) {
                 {order.items.slice(0, 2).map((item) => (
                   <li
                     key={item.id}
-                    className="flex items-center justify-between"
+                    className="flex items-center justify-between gap-2"
                   >
-                    <span>{item.name}</span>
-                    <span>
+                    <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      {item.name}
+                    </span>
+                    <span className="whitespace-nowrap">
                       {item.quantity} {item.unit}
                     </span>
                   </li>
@@ -51,9 +53,14 @@ export default function Card({ order, orderNumber }: CardProps) {
               </>
             ) : (
               order.items.map((item) => (
-                <li key={item.id} className="flex items-center justify-between">
-                  <span>{item.name}</span>
-                  <span>
+                <li
+                  key={item.id}
+                  className="flex items-center justify-between gap-2"
+                >
+                  <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    {item.name}
+                  </span>
+                  <span className="whitespace-nowrap">
                     {item.quantity} {item.unit.toLowerCase()}
                   </span>
                 </li>

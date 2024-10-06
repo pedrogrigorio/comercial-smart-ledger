@@ -90,6 +90,7 @@ function CreateOrder() {
     })
 
     reset()
+    router.back()
   }
 
   if (!customers) return null

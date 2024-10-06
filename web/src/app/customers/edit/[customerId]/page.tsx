@@ -58,6 +58,7 @@ export default function EditCustomer() {
     })
 
     reset(data)
+    router.back()
   }
 
   useEffect(() => {

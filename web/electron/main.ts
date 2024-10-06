@@ -1,11 +1,14 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { startServer } from 'next/dist/server/lib/start-server'
 import { getPort } from 'get-port-please'
 import { fork } from 'child_process'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import fs from 'fs'
+import { setupPrinter } from './printer'
+// import { PosPrinter, PosPrintData, PosPrintOptions } from 'electron-pos-printer'
 
+// Configuração de log
 const logFilePath = is.dev
   ? join(__dirname, '../app.log')
   : join(process.resourcesPath, 'app.log')
@@ -18,6 +21,7 @@ const logToFile = (message: string) => {
   logStream.write(logMessage)
 }
 
+// Configuração de banco
 const dbPath = is.dev
   ? join(__dirname, '../../server/prisma/dev.db')
   : join(process.resourcesPath, 'data/database.db')
@@ -25,6 +29,7 @@ const dbPath = is.dev
 logToFile(`caminho do banco: ${dbPath}`)
 process.env.DATABASE_URL = `file:${dbPath}`
 
+// Função para criar janela
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -55,6 +60,7 @@ const createWindow = () => {
   return mainWindow
 }
 
+// Inicia o servidor do Next
 const startNextJSServer = async () => {
   try {
     const nextJSPort = await getPort({ portRange: [30_011, 50_000] })
@@ -78,6 +84,7 @@ const startNextJSServer = async () => {
   }
 }
 
+// Inicia o backend
 const startBackend = () => {
   const backendPath = is.dev
     ? join(__dirname, '../../server/dist/main.js')
@@ -118,11 +125,12 @@ const startBackend = () => {
   // }, 5000)
 }
 
+// Chama quando o app está pronto
 app.whenReady().then(() => {
   createWindow()
   startBackend()
+  setupPrinter()
 
-  ipcMain.on('ping', () => console.log('pong'))
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
